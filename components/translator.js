@@ -6,7 +6,6 @@ const britishToAmericanTitles = require('./british-to-american-titles.js');
 
 class Translator {
 
-    
     americanToBritish(text){
         console.log('American to British');
         
@@ -49,15 +48,7 @@ class Translator {
                 text = makeTranslation(key, text, americanOnly);        
             }
         }
-        // American to British titles
-        // for (let key in americanToBritishTitles) {
-        //     if (tempLowerText.includes(key)){
-        //         text = makeTranslation(key.toLowerCase(), text, americanToBritishTitles);        
-        //     }
-        // }
-        
         return text;
-            
     }
 
     britishToAmerican(text){
@@ -67,29 +58,6 @@ class Translator {
         // console.log(textArr);
         
         textArr = titleTranslator(textArr, britishToAmericanTitles);
-        // for (let key in britishToAmericanTitles) {
-        //     for (let i = 0; i < textArr.length; i++){
-        //         // console.log(key);
-        //         let capped = key.charAt(0).toUpperCase() + key.slice(1);
-        //         console.log(capped)
-        //         if (textArr[i] == key){
-        //             let translation = britishToAmericanTitles[key];
-        //             textArr[i] = addGreenSpan(translation);
-        //             // if (textArr[i].charAt(0) == textArr[i].charAt(0).toUpperCase()){
-        //             //     // Change the translation to uppercase
-        //             // }
-        //             // console.log("word:", textArr[i]);
-        //         }
-        //         if (textArr[i] == capped) {
-        //             // else just add the lowercase
-        //             let translation = britishToAmericanTitles[key].charAt(0).toUpperCase() + britishToAmericanTitles[key].slice(1);
-        //             textArr[i] = addGreenSpan(translation);
-                        
-        //             console.log("word:", textArr[i]);
-        //         }   
-        //         // console.log(textArr);
-        //     }
-        // };
 
         // Check against every word
         for (let i = 0; i < textArr.length; i ++) {
@@ -119,35 +87,6 @@ class Translator {
                     text = makeTranslation(key, text, britishOnly);
             }
         }
-        
-        // British to American Titles
-        // for (let key in britishToAmericanTitles) {
-        //     if (tempLowerText.includes(key)){
-        //         // Fix for the Mr/Mrs bug (replacing mrs to mr.s)
-        //         let index = tempLowerText.search(key);
-                
-        //         // Check against capitalized ones as well
-        //         let capped = key.charAt(0).toUpperCase() + key.slice(1);
-        //         let cappedIndex = text.search(key);
-                
-                
-        //         // If the word is actually Mrs and not Mr, then change it
-        //         if (key == 'mr' && tempLowerText.charAt(index + key.length) == 's'){
-                        
-        //             continue;
-        //         }
-        //         else if (capped == 'Mr' && tempLowerText.charAt(cappedIndex + key.length) == 's'){
-        //             console.log("yes!");
-                    
-        //             continue;
-        //         }
-        //         else {
-        //             text = makeTranslation(key, text, britishToAmericanTitles);  
-        //         }
-        //     }
-        // }
-
-
 
         // British to American words. 
         // Because we will check the values against the keys, this is the only on
@@ -188,7 +127,6 @@ class Translator {
         return text;
     }
 
-
     stripSpan(translation) {
         // We will strip the span and return just the pure translation
         // Very roundabout, but here we are
@@ -210,10 +148,6 @@ function titleTranslator(arr, dict){
             if (arr[i] == key){
                 let translation = dict[key];
                 arr[i] = addGreenSpan(translation);
-                // if (textArr[i].charAt(0) == textArr[i].charAt(0).toUpperCase()){
-                //     // Change the translation to uppercase
-                // }
-                // console.log("word:", textArr[i]);
             }
             if (arr[i] == capped) {
                 // else just add the lowercase
@@ -256,23 +190,22 @@ function makeTranslation(key, text, translator) {
         // console.log(translation);
         // console.log(text.replaceAll(key, translation));
         
-    // Workaround for 3+ words. Easier to force it down (ie Rube Goldberg machine)
-    if (wordcount > 2){
-        // This will match regardless if the second word is capitalized
-        // and won't require having to force down all of the original text
-        let startIndex = text.toLowerCase().search(key);
-        let endIndex = startIndex + key.length;
-        
-        // console.log("start:",startIndex);
-        // console.log("end:",endIndex);
-        
-        let startText = text.slice(0, startIndex);
-        let endText = text.slice(endIndex, text.length);
-        
-        return startText + translation + endText;
-        // return text.toLowerCase().replaceAll(key, translation);
-    }
-
+        // Workaround for 3+ words. Easier to force it down (ie Rube Goldberg machine)
+        if (wordcount > 2){
+            // This will match regardless if the second word is capitalized
+            // and won't require having to force down all of the original text
+            let startIndex = text.toLowerCase().search(key);
+            let endIndex = startIndex + key.length;
+            
+            // console.log("start:",startIndex);
+            // console.log("end:",endIndex);
+            
+            let startText = text.slice(0, startIndex);
+            let endText = text.slice(endIndex, text.length);
+            
+            return startText + translation + endText;
+            // return text.toLowerCase().replaceAll(key, translation);
+        }
 
     return text.replaceAll(key, translation);
     }
@@ -329,9 +262,5 @@ function partOfAnotherWord(key, text) {
     // console.log('Standalone Word!');
     return false;
 }
-
-
-
-
 
 module.exports = Translator;
